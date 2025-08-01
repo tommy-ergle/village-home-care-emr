@@ -1,0 +1,339 @@
+.compliance-checker {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Compliance Header */
+.compliance-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.compliance-header h3 {
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.btn-details {
+  padding: 6px 12px;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 6px;
+  color: #007bff;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-details:hover {
+  background: #f8f9fa;
+  border-color: #007bff;
+}
+
+/* Compliance Summary */
+.compliance-summary {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+
+/* Compliance Score */
+.compliance-score {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.score-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.score-number {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+.score-label {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* Compliance Status */
+.compliance-status {
+  flex: 1;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.status-indicator.compliant .status-icon {
+  color: #28a745;
+}
+
+.status-indicator.non-compliant .status-icon {
+  color: #ffc107;
+}
+
+.status-icon {
+  font-size: 20px;
+}
+
+.status-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.compliance-message {
+  color: #6c757d;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Compliance Details */
+.compliance-details {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Requirements Section */
+.requirements-section {
+  margin-bottom: 20px;
+}
+
+.requirements-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 12px;
+}
+
+.requirements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.requirement-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.requirement-check {
+  color: #28a745;
+  font-weight: bold;
+}
+
+.requirement-text {
+  color: #495057;
+  font-size: 14px;
+}
+
+/* Issues Section */
+.issues-section {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.issues-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  margin-bottom: 12px;
+}
+
+.issues-header h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #dc3545;
+  margin: 0;
+}
+
+.expand-icon {
+  font-size: 20px;
+  color: #6c757d;
+}
+
+.issues-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.issue-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background: #fff5f5;
+  border-left: 3px solid #dc3545;
+  border-radius: 4px;
+}
+
+.issue-icon {
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.issue-text {
+  flex: 1;
+  color: #721c24;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Recommendations Section */
+.recommendations-section {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.recommendations-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #495057;
+  margin-bottom: 12px;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.recommendation-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px;
+  background: #fff8e1;
+  border-left: 3px solid #ffc107;
+  border-radius: 4px;
+}
+
+.recommendation-icon {
+  font-size: 16px;
+  margin-top: 2px;
+}
+
+.recommendation-text {
+  flex: 1;
+  color: #856404;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* Compliance Actions */
+.compliance-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.btn-fix-issues,
+.btn-export-report {
+  flex: 1;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-fix-issues {
+  background: #28a745;
+  color: white;
+  border: none;
+}
+
+.btn-fix-issues:hover {
+  background: #218838;
+}
+
+.btn-export-report {
+  background: white;
+  color: #007bff;
+  border: 1px solid #007bff;
+}
+
+.btn-export-report:hover {
+  background: #007bff;
+  color: white;
+}
+
+/* Compliance Tips */
+.compliance-tips {
+  background: #e7f3ff;
+  border: 1px solid #b8daff;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.compliance-tips h4 {
+  font-size: 14px;
+  font-weight: 600;
+  color: #004085;
+  margin-bottom: 12px;
+}
+
+.compliance-tips ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.compliance-tips li {
+  padding: 6px 0;
+  color: #004085;
+  font-size: 13px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.compliance-tips li::before {
+  content: '•';
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .compliance-summary {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .compliance-actions {
+    flex-direction: column;
+  }
+
+  .btn-fix-issues,
+  .btn-export-report {
+    width: 100%;
+  }
+}

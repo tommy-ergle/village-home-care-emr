@@ -5,8 +5,7 @@ import Dashboard from './components/dashboard/Dashboard';
 import Patients from './components/patients/Patients';
 import PatientList from './components/patients/PatientList';
 import SchedulingSystem from './components/scheduling/SchedulingSystem';
-import OasisAssessment from './components/clinical/OasisAssessment';
-import ClinicalNotes from './components/clinical/ClinicalNotes';
+import ClinicalDashboard from './components/clinical/ClinicalDashboard';
 import AIDocumentation from './components/documentation/AIDocumentation';
 import RevenueCycle from './components/revenue/RevenueCycle';
 import Analytics from './components/analytics/Analytics';
@@ -99,24 +98,20 @@ function App() {
       case 'scheduling':
         return <SchedulingSystem />;
       
+      case 'clinical':
       case 'oasis':
-        return (
-          <OasisAssessment 
-            patient={selectedPatient} 
-            onBack={() => setActiveTab('patients')}
-          />
-        );
-      
       case 'clinical-notes':
+      case 'documentation':
+      case 'assessments':
+      case 'medications':
+      case 'vitals':
+      case 'diagnoses':
         return (
-          <ClinicalNotes
+          <ClinicalDashboard 
             patient={selectedPatient}
-            onBack={() => setActiveTab('patients')}
+            onNavigate={handleNavigation}
           />
         );
-      
-      case 'documentation':
-        return <AIDocumentation />;
       
       case 'revenue':
         return <RevenueCycle />;

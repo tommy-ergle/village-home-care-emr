@@ -2,7 +2,7 @@ import React from 'react';
 import { 
   Home, Users, Calendar, FileText, Shield, DollarSign, 
   BarChart, Settings, HelpCircle, LogOut, Cpu, 
-  Activity, Heart, Brain, Pill, ClipboardList
+  Activity, Heart, Brain, Pill, ClipboardList, FileSignature
 } from 'lucide-react';
 import '../styles/AppleSidebar.css';
 
@@ -17,12 +17,7 @@ const AppleSidebar = ({ activeView, setActiveView, currentUser, onLogout }) => {
     { id: 'analytics', label: 'Analytics', icon: BarChart }
   ];
 
-  const clinicalNavItems = [
-    { id: 'assessments', label: 'Assessments', icon: ClipboardList },
-    { id: 'medications', label: 'Medications', icon: Pill },
-    { id: 'vitals', label: 'Vitals', icon: Activity },
-    { id: 'diagnoses', label: 'Diagnoses', icon: Heart }
-  ];
+  // Clinical nav items removed - now handled by Clinical Dashboard
 
   const bottomNavItems = [
     { id: 'settings', label: 'Settings', icon: Settings },
@@ -79,15 +74,6 @@ const AppleSidebar = ({ activeView, setActiveView, currentUser, onLogout }) => {
           ))}
         </div>
 
-        {/* Clinical Tools */}
-        {activeView === 'clinical' && (
-          <div className="nav-section-apple">
-            <h4 className="nav-section-title">Clinical Tools</h4>
-            {clinicalNavItems.map(item => (
-              <NavItem key={item.id} item={item} section="clinical" />
-            ))}
-          </div>
-        )}
 
         {/* Bottom Items */}
         <div className="nav-section-apple" style={{ marginTop: 'auto' }}>
