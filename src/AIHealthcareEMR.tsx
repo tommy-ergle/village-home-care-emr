@@ -6,8 +6,14 @@ import {
   Brain, Heart, Stethoscope, Pill, Clipboard, TrendingUp,
   Shield, Phone, Mail, MapPin, Save, Download, Upload,
   BarChart3, PieChart, Settings, HelpCircle, MessageSquare,
-  Printer, Share2, Archive, RefreshCw, Eye, EyeOff
+  Printer, Share2, Archive, RefreshCw, Eye, EyeOff, Cpu
 } from 'lucide-react';
+import AppleSidebar from './components/AppleSidebar';
+import SchedulingSystemExternal from './components/scheduling/SchedulingSystem';
+import PatientsExternal from './components/patients/Patients';
+import OasisAssessmentExternal from './components/clinical/OasisAssessment';
+import './styles/AIHealthcareEMR.css';
+import './styles/AppleSidebar.css';
 
 // TypeScript Interfaces
 interface User {
@@ -773,16 +779,18 @@ const AIHealthcareEMR: React.FC = () => {
       ));
     } else {
       const newPatient: Patient = {
-        id: Date.now().toString(),
-        status: 'Active',
-        alerts: [],
-        medications: [],
-        allergies: [],
-        careTeam: [],
-        secondaryDiagnoses: [],
-        fallRisk: 'Low',
-        ...patientData as Patient
-      };
+        ...{
+          id: Date.now().toString(),
+          status: 'Active' as const,
+          alerts: [],
+          medications: [],
+          allergies: [],
+          careTeam: [],
+          secondaryDiagnoses: [],
+          fallRisk: 'Low' as const,
+        },
+        ...patientData
+      } as Patient;
       setPatients(prev => [...prev, newPatient]);
     }
     setShowPatientForm(false);
@@ -792,13 +800,15 @@ const AIHealthcareEMR: React.FC = () => {
   // Clinical documentation functions
   const handleSaveNote = (noteData: Partial<ClinicalNote>) => {
     const newNote: ClinicalNote = {
-      id: Date.now().toString(),
-      authorId: currentUser?.id || '',
-      authorName: currentUser?.name || '',
-      date: new Date().toISOString().split('T')[0],
-      signed: false,
-      ...noteData as ClinicalNote
-    };
+      ...{
+        id: Date.now().toString(),
+        authorId: currentUser?.id || '',
+        authorName: currentUser?.name || '',
+        date: new Date().toISOString().split('T')[0],
+        signed: false,
+      },
+      ...noteData
+    } as ClinicalNote;
     setClinicalNotes(prev => [...prev, newNote]);
     setShowNoteForm(false);
   };
@@ -819,11 +829,13 @@ const AIHealthcareEMR: React.FC = () => {
       ));
     } else {
       const newAppointment: Appointment = {
-        id: Date.now().toString(),
-        status: 'Scheduled',
-        duration: 60,
-        ...appointmentData as Appointment
-      };
+        ...{
+          id: Date.now().toString(),
+          status: 'Scheduled' as const,
+          duration: 60,
+        },
+        ...appointmentData
+      } as Appointment;
       setAppointments(prev => [...prev, newAppointment]);
     }
     setShowAppointmentForm(false);
@@ -833,13 +845,15 @@ const AIHealthcareEMR: React.FC = () => {
   // Revenue cycle functions
   const handleSaveClaim = (claimData: Partial<Claim>) => {
     const newClaim: Claim = {
-      id: Date.now().toString(),
-      claimNumber: `CLM${Date.now()}`,
-      status: 'Draft',
-      totalAmount: 0,
-      billingCodes: [],
-      ...claimData as Claim
-    };
+      ...{
+        id: Date.now().toString(),
+        claimNumber: `CLM${Date.now()}`,
+        status: 'Draft' as const,
+        totalAmount: 0,
+        billingCodes: [],
+      },
+      ...claimData
+    } as Claim;
     setClaims(prev => [...prev, newClaim]);
     setShowClaimForm(false);
   };
@@ -915,112 +929,139 @@ const AIHealthcareEMR: React.FC = () => {
   );
 
   // Main Dashboard Component
-  const Dashboard = () => (
-    <div className="p-6">
-      <div className="mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Welcome back, {currentUser?.name}</h1>
-        <p className="text-gray-600">Here's your overview for today</p>
+  const Dashboard = ({ setActiveView }: { setActiveView: (view: string) => void }) => (
+    <div className="dashboard-apple">
+      <div className="dashboard-header-apple">
+        <h1 className="welcome-message">Welcome back, {currentUser?.name}</h1>
+        <p className="dashboard-date">Here's your overview for {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}</p>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Users className="h-8 w-8 text-blue-600" />
-            <span className="text-2xl font-bold text-gray-800">
-              {analyticsData?.census.total || 0}
-            </span>
+      <div className="stats-grid-apple">
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <h4 className="stat-title-apple">Total Patients</h4>
+            <div className="stat-icon-apple">
+              <Users size={24} />
+            </div>
           </div>
-          <h3 className="text-gray-600 font-medium">Total Patients</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            +{analyticsData?.census.byStatus['Pending'] || 0} pending
-          </p>
+          <div className="stat-value-apple">{analyticsData?.census.total || 0}</div>
+          <div className="stat-change-apple positive">
+            <TrendingUp size={16} />
+            <span>+{analyticsData?.census.byStatus['Pending'] || 0} pending</span>
+          </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Calendar className="h-8 w-8 text-green-600" />
-            <span className="text-2xl font-bold text-gray-800">
-              {analyticsData?.visits.scheduled || 0}
-            </span>
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <h4 className="stat-title-apple">Today's Visits</h4>
+            <div className="stat-icon-apple">
+              <Calendar size={24} />
+            </div>
           </div>
-          <h3 className="text-gray-600 font-medium">Today's Visits</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            {analyticsData?.visits.completed || 0} completed
-          </p>
+          <div className="stat-value-apple">{analyticsData?.visits.scheduled || 0}</div>
+          <div className="stat-change-apple positive">
+            <Check size={16} />
+            <span>{analyticsData?.visits.completed || 0} completed</span>
+          </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <DollarSign className="h-8 w-8 text-yellow-600" />
-            <span className="text-2xl font-bold text-gray-800">
-              ${((analyticsData?.financial.revenue || 0) / 1000).toFixed(0)}k
-            </span>
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <h4 className="stat-title-apple">Monthly Revenue</h4>
+            <div className="stat-icon-apple">
+              <DollarSign size={24} />
+            </div>
           </div>
-          <h3 className="text-gray-600 font-medium">Monthly Revenue</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            ${((analyticsData?.financial.outstanding || 0) / 1000).toFixed(0)}k outstanding
-          </p>
+          <div className="stat-value-apple">${((analyticsData?.financial.revenue || 0) / 1000).toFixed(0)}k</div>
+          <div className="stat-change-apple">
+            <Clock size={16} />
+            <span>${((analyticsData?.financial.outstanding || 0) / 1000).toFixed(0)}k outstanding</span>
+          </div>
         </div>
         
-        <div className="bg-white rounded-lg shadow p-6">
-          <div className="flex items-center justify-between mb-4">
-            <Activity className="h-8 w-8 text-purple-600" />
-            <span className="text-2xl font-bold text-gray-800">
-              {analyticsData?.clinical.readmissionRate || 0}%
-            </span>
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <h4 className="stat-title-apple">Readmission Rate</h4>
+            <div className="stat-icon-apple">
+              <Activity size={24} />
+            </div>
           </div>
-          <h3 className="text-gray-600 font-medium">Readmission Rate</h3>
-          <p className="text-sm text-gray-500 mt-1">
-            30-day average
-          </p>
+          <div className="stat-value-apple">{analyticsData?.clinical.readmissionRate || 0}%</div>
+          <div className="stat-change-apple negative">
+            <AlertCircle size={16} />
+            <span>30-day average</span>
+          </div>
+        </div>
+      </div>
+      
+      {/* Quick Actions */}
+      <div className="quick-actions-apple">
+        <div className="section-header-apple">
+          <h2 className="section-title-apple">Quick Actions</h2>
+        </div>
+        <div className="actions-grid-apple">
+          <div className="action-card-apple" onClick={() => setActiveView('patients')}>
+            <div className="action-icon-apple">
+              <Users size={24} />
+            </div>
+            <span className="action-label-apple">New Patient</span>
+          </div>
+          <div className="action-card-apple" onClick={() => setActiveView('scheduling')}>
+            <div className="action-icon-apple">
+              <Calendar size={24} />
+            </div>
+            <span className="action-label-apple">Schedule Visit</span>
+          </div>
+          <div className="action-card-apple" onClick={() => setActiveView('clinical')}>
+            <div className="action-icon-apple">
+              <FileText size={24} />
+            </div>
+            <span className="action-label-apple">Create Note</span>
+          </div>
+          <div className="action-card-apple" onClick={() => setActiveView('assessments')}>
+            <div className="action-icon-apple">
+              <Clipboard size={24} />
+            </div>
+            <span className="action-label-apple">Start OASIS</span>
+          </div>
         </div>
       </div>
       
       {/* Recent Activities */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b">
-            <h2 className="text-lg font-semibold text-gray-800">Recent Admissions</h2>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {patients.slice(0, 3).map(patient => (
-                <div key={patient.id} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-gray-800">
-                      {patient.firstName} {patient.lastName}
-                    </p>
-                    <p className="text-sm text-gray-600">{patient.primaryDiagnosis}</p>
-                  </div>
-                  <span className="px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm">
-                    {patient.status}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="recent-activities-apple">
+        <div className="section-header-apple">
+          <h2 className="section-title-apple">Recent Activities</h2>
         </div>
-        
-        <div className="bg-white rounded-lg shadow">
-          <div className="p-6 border-b">
-            <h2 className="text-lg font-semibold text-gray-800">Upcoming Visits</h2>
-          </div>
-          <div className="p-6">
-            <div className="space-y-4">
-              {appointments.slice(0, 3).map(apt => (
-                <div key={apt.id} className="flex items-center justify-between">
-                  <div>
-                    <p className="font-medium text-gray-800">{apt.patientName}</p>
-                    <p className="text-sm text-gray-600">
-                      {apt.time} - {apt.clinicianName}
-                    </p>
-                  </div>
-                  <span className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm">
-                    {apt.type}
-                  </span>
-                </div>
-              ))}
+        <div className="activities-list-apple">
+          <div className="activity-item-apple">
+            <div className="activity-icon-apple">
+              <Users size={18} style={{ color: '#0071e3' }} />
             </div>
+            <div className="activity-content-apple">
+              <h4 className="activity-title-apple">New patient admitted</h4>
+              <p className="activity-description-apple">Sarah Johnson was admitted for post-surgical care</p>
+            </div>
+            <span className="activity-time-apple">2 hours ago</span>
+          </div>
+          <div className="activity-item-apple">
+            <div className="activity-icon-apple">
+              <FileText size={18} style={{ color: '#34c759' }} />
+            </div>
+            <div className="activity-content-apple">
+              <h4 className="activity-title-apple">OASIS assessment completed</h4>
+              <p className="activity-description-apple">Robert Chen's 60-day recert completed</p>
+            </div>
+            <span className="activity-time-apple">5 hours ago</span>
+          </div>
+          <div className="activity-item-apple">
+            <div className="activity-icon-apple">
+              <Calendar size={18} style={{ color: '#ff9500' }} />
+            </div>
+            <div className="activity-content-apple">
+              <h4 className="activity-title-apple">Visit rescheduled</h4>
+              <p className="activity-description-apple">Maria Rodriguez's PT visit moved to tomorrow</p>
+            </div>
+            <span className="activity-time-apple">Yesterday</span>
           </div>
         </div>
       </div>
@@ -1660,59 +1701,130 @@ const AIHealthcareEMR: React.FC = () => {
   };
 
   // Main Layout
-  const MainLayout = () => (
-    <div className="flex h-screen bg-gray-100">
-      <Sidebar />
-      
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
-        <header className="bg-white shadow-sm">
-          <div className="px-6 py-4 flex justify-between items-center">
-            <h2 className="text-xl font-semibold text-gray-800">
-              {activeModule.charAt(0).toUpperCase() + activeModule.slice(1)}
-            </h2>
-            <div className="flex items-center gap-4">
-              <button className="relative p-2 text-gray-600 hover:text-gray-800">
-                <Bell className="h-5 w-5" />
-                <span className="absolute top-0 right-0 h-2 w-2 bg-red-500 rounded-full"></span>
-              </button>
-              <div className="flex items-center gap-2">
-                <div className="h-8 w-8 bg-indigo-600 rounded-full flex items-center justify-center text-white font-medium">
-                  {currentUser?.name.charAt(0)}
+  const MainLayout = () => {
+    const [activeView, setActiveView] = useState('dashboard');
+    
+    const renderContent = () => {
+      switch (activeView) {
+        case 'dashboard':
+          return <Dashboard setActiveView={setActiveView} />;
+        case 'patients':
+          return <PatientsExternal />;
+        case 'scheduling':
+          return <SchedulingSystemExternal />;
+        case 'clinical':
+          return <ClinicalNotes />;
+        case 'assessments':
+          return <OasisAssessmentExternal patient={selectedPatient} onBack={() => setActiveView('patients')} />;
+        case 'careplans':
+          return (
+            <div className="content-wrapper-apple">
+              <h1 className="apple-h2">Care Plans</h1>
+              <p className="apple-body">Care plans management coming soon...</p>
+            </div>
+          );
+        case 'revenue':
+          return <RevenueCycleManagement />;
+        case 'analytics':
+          return <AnalyticsDashboard />;
+        case 'settings':
+          return (
+            <div className="content-wrapper-apple">
+              <h1 className="apple-h2">Settings</h1>
+              <p className="apple-body">Settings panel coming soon...</p>
+            </div>
+          );
+        default:
+          return <Dashboard setActiveView={setActiveView} />;
+      }
+    };
+    
+    return (
+      <div className="ai-healthcare-emr apple-design">
+        <div className="emr-layout-apple">
+          {/* Apple-style Sidebar */}
+          <AppleSidebar 
+            activeView={activeView} 
+            setActiveView={setActiveView}
+            currentUser={currentUser}
+            onLogout={handleLogout}
+          />
+          
+          {/* Main Content */}
+          <main className="main-content-apple">
+            {/* Apple-style Header */}
+            <header className="emr-header-apple with-sidebar">
+              <div className="header-content-apple">
+                <div className="header-left-apple">
+                  <h1 className="brand-name">{activeView.charAt(0).toUpperCase() + activeView.slice(1)}</h1>
                 </div>
-                <span className="text-sm font-medium text-gray-700">
-                  {currentUser?.name}
-                </span>
+                
+                <div className="header-center-apple">
+                  <div className="search-bar-apple">
+                    <Search size={18} className="search-icon" />
+                    <input 
+                      type="text" 
+                      placeholder="Search patients, records, or commands..." 
+                      className="search-input-apple"
+                    />
+                  </div>
+                </div>
+                
+                <div className="header-right-apple">
+                  <button className="header-icon-btn">
+                    <Bell size={20} />
+                    <span className="notification-badge">3</span>
+                  </button>
+                  <button className="header-icon-btn">
+                    <HelpCircle size={20} />
+                  </button>
+                  <button className="header-icon-btn">
+                    <Settings size={20} />
+                  </button>
+                </div>
               </div>
+            </header>
+            
+            {/* Clean Tab Navigation (for sub-sections) */}
+            {activeView === 'clinical' && (
+              <nav className="emr-nav-apple">
+                <div className="nav-container-apple">
+                  <button className="nav-item-apple active">
+                    <FileText size={16} />
+                    <span>Notes</span>
+                  </button>
+                  <button className="nav-item-apple">
+                    <Clipboard size={16} />
+                    <span>Assessments</span>
+                  </button>
+                  <button className="nav-item-apple">
+                    <Activity size={16} />
+                    <span>Vitals</span>
+                  </button>
+                  <button className="nav-item-apple">
+                    <Pill size={16} />
+                    <span>Medications</span>
+                  </button>
+                </div>
+              </nav>
+            )}
+            
+            {/* Content Area */}
+            <div className="emr-main-apple">
+              {renderContent()}
             </div>
-          </div>
-        </header>
-        
-        {/* Main Content */}
-        <main className="flex-1 overflow-y-auto">
-          {activeModule === 'dashboard' && <Dashboard />}
-          {activeModule === 'patients' && <PatientManagement />}
-          {activeModule === 'clinical' && <ClinicalNotes />}
-          {activeModule === 'scheduling' && <SchedulingSystem />}
-          {activeModule === 'revenue' && <RevenueCycleManagement />}
-          {activeModule === 'analytics' && <AnalyticsDashboard />}
-          {activeModule === 'settings' && (
-            <div className="p-6">
-              <h1 className="text-2xl font-bold text-gray-800 mb-4">Settings</h1>
-              <p className="text-gray-600">Settings panel coming soon...</p>
-            </div>
-          )}
-        </main>
+          </main>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // Main render
   return (
     <div className="min-h-screen">
       {!isAuthenticated ? <LoginScreen /> : <MainLayout />}
       
-      <style jsx>{`
+      <style>{`
         /* Custom styles for the EMR system */
         * {
           box-sizing: border-box;

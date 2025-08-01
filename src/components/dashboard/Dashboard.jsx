@@ -7,7 +7,7 @@ import {
   MapPin, Phone, Stethoscope, ClipboardList,
   Home, Star, ArrowRight, MessageSquare
 } from 'lucide-react';
-import '../../styles/Dashboard.css';
+import '../../styles/components/Dashboard.css';
 
 const Dashboard = ({ onNavigate }) => {
   const [currentTime, setCurrentTime] = useState(new Date());

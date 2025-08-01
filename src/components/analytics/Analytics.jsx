@@ -5,7 +5,7 @@ import {
   Calendar, BarChart3, PieChart, Zap, Heart,
   CheckCircle, XCircle, Filter, ChevronUp, ChevronDown
 } from 'lucide-react';
-import '../../styles/Analytics.css';
+import '../../styles/components/Analytics.css';
 
 const Analytics = () => {
   const [timeframe, setTimeframe] = useState('month');

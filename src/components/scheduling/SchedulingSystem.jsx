@@ -1,10 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Calendar, Plus, ChevronLeft, ChevronRight, Clock, 
   User, MapPin, Phone, Filter, Search, Edit, Trash2,
-  AlertCircle, Check, X
+  AlertCircle, Check, X, Sparkles, Trophy, Heart,
+  Star, Users, Activity, Award, Target, Zap,
+  Sun, Moon, CloudRain, CloudSnow, Coffee,
+  Cpu, TrendingUp, CheckCircle
 } from 'lucide-react';
-import '../../styles/Scheduling.css';
+import '../../styles/components/SchedulingApple.css';
 
 const SchedulingSystem = () => {
   const [viewMode, setViewMode] = useState('month'); // month, week, day
@@ -12,6 +15,10 @@ const SchedulingSystem = () => {
   const [showNewAppointment, setShowNewAppointment] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
   const [selectedClinician, setSelectedClinician] = useState('all');
+  const [showConfetti, setShowConfetti] = useState(false);
+  const [completedToday, setCompletedToday] = useState(0);
+  const [hoveredDate, setHoveredDate] = useState(null);
+  const [selectedAppointment, setSelectedAppointment] = useState(null);
   
   // Sample appointments data
   const [appointments, setAppointments] = useState([
@@ -83,12 +90,28 @@ const SchedulingSystem = () => {
   ];
 
   const appointmentTypes = [
-    { value: 'Skilled Nursing', color: 'nursing' },
-    { value: 'Physical Therapy', color: 'therapy' },
-    { value: 'Occupational Therapy', color: 'therapy' },
-    { value: 'Speech Therapy', color: 'therapy' },
-    { value: 'Home Health Aide', color: 'aide' }
+    { value: 'Skilled Nursing', color: 'nursing', emoji: '💊', gradient: 'gradient-blue' },
+    { value: 'Physical Therapy', color: 'therapy', emoji: '🏃', gradient: 'gradient-green' },
+    { value: 'Occupational Therapy', color: 'therapy', emoji: '✋', gradient: 'gradient-purple' },
+    { value: 'Speech Therapy', color: 'therapy', emoji: '💬', gradient: 'gradient-orange' },
+    { value: 'Home Health Aide', color: 'aide', emoji: '🏠', gradient: 'gradient-pink' }
   ];
+
+  const motivationalMessages = [
+    { count: 1, message: "Great start! 🌟", emoji: "🎯" },
+    { count: 3, message: "On fire! 🔥", emoji: "🚀" },
+    { count: 5, message: "Productivity champion! 🏆", emoji: "👑" },
+    { count: 7, message: "Unstoppable! 💪", emoji: "⭐" },
+    { count: 10, message: "Legendary performance! 🌟", emoji: "🎊" }
+  ];
+
+  // Add confetti effect
+  useEffect(() => {
+    if (showConfetti) {
+      const timer = setTimeout(() => setShowConfetti(false), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showConfetti]);
 
   // New appointment form state
   const [newAppointment, setNewAppointment] = useState({
@@ -216,9 +239,29 @@ const SchedulingSystem = () => {
     });
   };
 
-  const getAppointmentTypeColor = (type) => {
-    const typeConfig = appointmentTypes.find(t => t.value === type);
-    return typeConfig ? typeConfig.color : 'nursing';
+  const getAppointmentTypeConfig = (type) => {
+    return appointmentTypes.find(t => t.value === type) || appointmentTypes[0];
+  };
+
+  const getWeatherEmoji = () => {
+    const hour = new Date().getHours();
+    if (hour < 6) return '🌙';
+    if (hour < 12) return '☀️';
+    if (hour < 17) return '🌤️';
+    if (hour < 20) return '🌅';
+    return '🌙';
+  };
+
+  const completeAppointment = (appointmentId) => {
+    setAppointments(prev => prev.map(apt => 
+      apt.id === appointmentId ? { ...apt, status: 'completed' } : apt
+    ));
+    setCompletedToday(prev => prev + 1);
+    
+    const message = motivationalMessages.find(m => m.count === completedToday + 1);
+    if (message) {
+      setShowConfetti(true);
+    }
   };
 
   // Render different views
@@ -226,13 +269,13 @@ const SchedulingSystem = () => {
     const monthData = getMonthData();
     
     return (
-      <div className="calendar-grid">
-        <div className="calendar-header">
+      <div className="calendar-grid-apple">
+        <div className="calendar-header-apple">
           {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-            <div key={day} className="calendar-day-header">{day}</div>
+            <div key={day} className="calendar-day-header-apple">{day}</div>
           ))}
         </div>
-        <div className="calendar-body">
+        <div className="calendar-body-apple">
           {monthData.map((day, index) => {
             const dayAppointments = getAppointmentsForDate(day);
             const dateStr = `${day.year}-${String(day.month + 1).padStart(2, '0')}-${String(day.date).padStart(2, '0')}`;
@@ -240,32 +283,42 @@ const SchedulingSystem = () => {
             return (
               <div
                 key={index}
-                className={`calendar-cell ${day.otherMonth ? 'other-month' : ''} ${isToday(day) ? 'today' : ''}`}
+                className={`calendar-cell-apple ${day.otherMonth ? 'other-month' : ''} ${isToday(day) ? 'today' : ''}`}
                 onClick={() => {
                   setSelectedDate(dateStr);
                   if (dayAppointments.length === 0) {
                     setNewAppointment(prev => ({ ...prev, date: dateStr }));
                     setShowNewAppointment(true);
+                  } else {
+                    setSelectedAppointment(dayAppointments[0]);
                   }
                 }}
               >
-                <div className="calendar-date">{day.date}</div>
-                <div>
-                  {dayAppointments.slice(0, 3).map(apt => (
-                    <div
-                      key={apt.id}
-                      className={`appointment-slot ${getAppointmentTypeColor(apt.type)}`}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        // Handle appointment click
-                      }}
-                    >
-                      {apt.time} - {apt.patientName.split(' ')[1]}
-                    </div>
-                  ))}
+                <div className="date-number-apple">
+                  {day.date}
+                  {isToday(day) && <span className="today-indicator-apple">Today</span>}
+                </div>
+                <div className="appointments-preview-apple">
+                  {dayAppointments.slice(0, 3).map(apt => {
+                    const typeColor = apt.type === 'Skilled Nursing' ? 'nursing' : 
+                                     apt.type.includes('Therapy') ? 'therapy' : 'aide';
+                    return (
+                      <div
+                        key={apt.id}
+                        className={`appointment-chip-apple ${typeColor}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedAppointment(apt);
+                        }}
+                      >
+                        <Clock size={10} />
+                        <span>{apt.time}</span>
+                      </div>
+                    );
+                  })}
                   {dayAppointments.length > 3 && (
-                    <div style={{ fontSize: '11px', color: '#6b7280', marginTop: '2px' }}>
-                      +{dayAppointments.length - 3} more
+                    <div className="appointment-chip-apple" style={{ background: '#f5f5f7', color: '#86868b' }}>
+                      +{dayAppointments.length - 3}
                     </div>
                   )}
                 </div>
@@ -283,220 +336,227 @@ const SchedulingSystem = () => {
   });
 
   return (
-    <div className="scheduling-container">
-      <div className="scheduling-header">
-        <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', margin: 0 }}>
-          Scheduling System
-        </h2>
-        <button 
-          className="add-patient-btn"
-          onClick={() => setShowNewAppointment(true)}
-        >
-          <Plus size={20} />
-          New Appointment
-        </button>
+    <div className="scheduling-container apple-design">
+      <div className="scheduling-header-apple">
+        <div>
+          <h1 className="page-title-apple">Scheduling</h1>
+          <p className="page-subtitle-apple">Manage appointments with AI assistance</p>
+        </div>
       </div>
 
-      {/* Clinician Filter */}
-      <div className="clinician-filter">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginRight: '16px' }}>
-          <Filter size={16} color="#6b7280" />
-          <span style={{ fontSize: '14px', color: '#6b7280' }}>Filter by clinician:</span>
+      {/* AI Assistant Header */}
+      <div className="ai-assistant-header">
+        <div className="ai-icon-container">
+          <Cpu size={18} />
         </div>
-        <button
-          className={`clinician-chip ${selectedClinician === 'all' ? 'active' : ''}`}
-          onClick={() => setSelectedClinician('all')}
-        >
-          All Clinicians
-        </button>
-        {clinicians.slice(0, 4).map(clinician => (
-          <button
-            key={clinician}
-            className={`clinician-chip ${selectedClinician === clinician ? 'active' : ''}`}
-            onClick={() => setSelectedClinician(clinician)}
-          >
-            {clinician.split(',')[0]}
-          </button>
-        ))}
+        <span className="ai-status-text">AI Assistant is optimizing your schedule</span>
+        <div className="ai-active-indicator" />
       </div>
+
+      {/* Stats Row */}
+      <div className="stats-row-apple">
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <span className="stat-label-apple">Today's Appointments</span>
+            <div className="stat-icon-apple">
+              <Calendar size={20} />
+            </div>
+          </div>
+          <h2 className="stat-value-apple">{todayAppointments.length}</h2>
+          <div className="stat-trend-apple trend-positive">
+            <TrendingUp size={14} />
+            <span>12% from yesterday</span>
+          </div>
+        </div>
+        
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <span className="stat-label-apple">Completed</span>
+            <div className="stat-icon-apple">
+              <CheckCircle size={20} />
+            </div>
+          </div>
+          <h2 className="stat-value-apple">{completedToday}</h2>
+          <div className="stat-trend-apple trend-positive">
+            <TrendingUp size={14} />
+            <span>On track</span>
+          </div>
+        </div>
+        
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <span className="stat-label-apple">Total Patients</span>
+            <div className="stat-icon-apple">
+              <Users size={20} />
+            </div>
+          </div>
+          <h2 className="stat-value-apple">156</h2>
+          <div className="stat-trend-apple trend-positive">
+            <TrendingUp size={14} />
+            <span>8 new this week</span>
+          </div>
+        </div>
+      </div>
+
 
       {/* Calendar Controls */}
-      <div className="calendar-controls">
-        <div className="view-selector">
+      <div className="calendar-controls-apple">
+        <div className="view-selector-apple">
           <button
-            className={`view-btn ${viewMode === 'month' ? 'active' : ''}`}
+            className={`view-btn-apple ${viewMode === 'month' ? 'active' : ''}`}
             onClick={() => setViewMode('month')}
           >
             Month
           </button>
           <button
-            className={`view-btn ${viewMode === 'week' ? 'active' : ''}`}
+            className={`view-btn-apple ${viewMode === 'week' ? 'active' : ''}`}
             onClick={() => setViewMode('week')}
           >
             Week
           </button>
           <button
-            className={`view-btn ${viewMode === 'day' ? 'active' : ''}`}
+            className={`view-btn-apple ${viewMode === 'day' ? 'active' : ''}`}
             onClick={() => setViewMode('day')}
           >
             Day
           </button>
         </div>
 
-        <div className="calendar-nav">
-          <button className="nav-btn" onClick={() => navigateDate(-1)}>
-            <ChevronLeft size={20} />
+        <div className="calendar-nav-apple">
+          <button className="nav-btn-apple" onClick={() => navigateDate(-1)}>
+            <ChevronLeft size={18} />
           </button>
-          <h3 style={{ margin: '0 16px', fontSize: '16px', fontWeight: '500', minWidth: '200px', textAlign: 'center' }}>
+          <h3 className="current-date-apple">
             {formatDateHeader()}
           </h3>
-          <button className="nav-btn" onClick={() => navigateDate(1)}>
-            <ChevronRight size={20} />
+          <button className="nav-btn-apple" onClick={() => navigateDate(1)}>
+            <ChevronRight size={18} />
           </button>
-          <button className="today-btn" onClick={goToToday}>
+          <button className="today-btn-apple" onClick={goToToday}>
             Today
           </button>
         </div>
       </div>
 
       {/* Calendar View */}
-      {viewMode === 'month' && renderMonthView()}
+      <div className="calendar-container-apple">
+        {viewMode === 'month' && renderMonthView()}
+      </div>
 
-      {/* Today's Appointments Sidebar */}
-      <div className="appointments-sidebar">
-        <h3 style={{ marginBottom: '16px', fontSize: '18px', fontWeight: '600', color: '#111827' }}>
-          Today's Appointments ({todayAppointments.length})
-        </h3>
+      {/* Add Appointment Button */}
+      <button 
+        className="add-appointment-btn-apple"
+        onClick={() => setShowNewAppointment(true)}
+      >
+        <Plus size={20} />
+        New Appointment
+      </button>
+
+      {/* Appointments Sidebar */}
+      <div className={`appointments-sidebar-apple ${selectedAppointment ? 'active' : ''}`}>
+        <div className="sidebar-header-apple">
+          <h3 className="sidebar-title-apple">Appointment Details</h3>
+          <button className="close-btn-apple" onClick={() => setSelectedAppointment(null)}>
+            <X size={18} />
+          </button>
+        </div>
         
-        {todayAppointments.length === 0 ? (
-          <div style={{ 
-            textAlign: 'center', 
-            padding: '40px', 
-            color: '#6b7280',
-            background: '#f9fafb',
-            borderRadius: '8px'
-          }}>
-            <Calendar size={48} style={{ margin: '0 auto 16px', opacity: 0.3 }} />
-            <p>No appointments scheduled for today</p>
-          </div>
-        ) : (
-          todayAppointments.map(appointment => (
-            <div key={appointment.id} className="appointment-card">
-              <div className="appointment-header">
+        {selectedAppointment && (
+          <div className="sidebar-content-apple">
+            <div className="appointment-card-apple">
+              <div className="appointment-header-apple">
                 <div>
-                  <div className="appointment-time">
-                    {appointment.time} - {appointment.patientName}
-                  </div>
-                  <div style={{ fontSize: '14px', color: '#6b7280', marginTop: '4px' }}>
-                    {appointment.type} • {appointment.duration} min
+                  <div className="appointment-time-apple">{selectedAppointment.time}</div>
+                  <div className={`appointment-type-badge-apple badge-${selectedAppointment.type === 'Skilled Nursing' ? 'nursing' : selectedAppointment.type.includes('Therapy') ? 'therapy' : 'aide'}`}>
+                    {selectedAppointment.type}
                   </div>
                 </div>
-                <span className={`appointment-status status-${appointment.status}`}>
-                  {appointment.status}
-                </span>
               </div>
               
-              <div style={{ fontSize: '14px', color: '#4b5563' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <User size={14} />
-                  <span>{appointment.clinician}</span>
+              <div className="patient-info-apple">
+                <h4 className="patient-name-apple">{selectedAppointment.patientName}</h4>
+                <div className="patient-details-apple">
+                  <div className="detail-row-apple">
+                    <User size={16} />
+                    <span>{selectedAppointment.clinician}</span>
+                  </div>
+                  <div className="detail-row-apple">
+                    <MapPin size={16} />
+                    <span>{selectedAppointment.address}</span>
+                  </div>
+                  <div className="detail-row-apple">
+                    <Phone size={16} />
+                    <span>{selectedAppointment.phone}</span>
+                  </div>
+                  <div className="detail-row-apple">
+                    <Clock size={16} />
+                    <span>{selectedAppointment.duration} minutes</span>
+                  </div>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <MapPin size={14} />
-                  <span>{appointment.address}</span>
+              </div>
+              
+              {selectedAppointment.notes && (
+                <div style={{ padding: '1rem', background: '#f5f5f7', borderRadius: '0.5rem', marginTop: '1rem' }}>
+                  <strong style={{ display: 'block', marginBottom: '0.5rem' }}>Visit Notes</strong>
+                  <p style={{ margin: 0, color: '#86868b', fontSize: '0.875rem' }}>{selectedAppointment.notes}</p>
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <Phone size={14} />
-                  <span>{appointment.phone}</span>
-                </div>
-                {appointment.notes && (
-                  <div style={{ marginTop: '8px', padding: '8px', background: '#f9fafb', borderRadius: '6px' }}>
-                    <strong>Notes:</strong> {appointment.notes}
+              )}
+              
+              <div className="appointment-actions-apple">
+                {selectedAppointment.status !== 'completed' ? (
+                  <>
+                    <button 
+                      className="action-btn-apple primary"
+                      onClick={() => completeAppointment(selectedAppointment.id)}
+                    >
+                      Complete Visit
+                    </button>
+                    <button className="action-btn-apple">
+                      Reschedule
+                    </button>
+                  </>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '1rem', color: '#34c759' }}>
+                    <CheckCircle size={48} style={{ marginBottom: '0.5rem' }} />
+                    <p style={{ margin: 0, fontWeight: 600 }}>Visit Completed</p>
                   </div>
                 )}
               </div>
-              
-              <div style={{ display: 'flex', gap: '8px', marginTop: '12px' }}>
-                <button style={{
-                  padding: '6px 12px',
-                  border: '1px solid #10b981',
-                  color: '#10b981',
-                  background: 'white',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  cursor: 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '4px'
-                }}>
-                  <Check size={14} />
-                  Complete
-                </button>
-                <button style={{
-                  padding: '6px 12px',
-                  border: '1px solid #e5e7eb',
-                  color: '#6b7280',
-                  background: 'white',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  cursor: 'pointer'
-                }}>
-                  Reschedule
-                </button>
-                <button style={{
-                  padding: '6px 12px',
-                  border: '1px solid #e5e7eb',
-                  color: '#ef4444',
-                  background: 'white',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  cursor: 'pointer'
-                }}>
-                  Cancel
-                </button>
-              </div>
             </div>
-          ))
+          </div>
         )}
       </div>
 
       {/* New Appointment Modal */}
       {showNewAppointment && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 'bold', color: '#111827' }}>
-                Schedule New Appointment
-              </h3>
+        <div className="modal-overlay-apple">
+          <div className="modal-content-apple">
+            <div className="modal-header-apple">
+              <h3 className="modal-title-apple">New Appointment</h3>
               <button
+                className="close-btn-apple"
                 onClick={() => setShowNewAppointment(false)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '4px'
-                }}
               >
-                <X size={24} color="#6b7280" />
+                <X size={18} />
               </button>
             </div>
 
-            <div className="modal-body">
-              <div className="form-group">
-                <label className="form-label">Patient Name *</label>
+            <div className="modal-body-apple">
+              <div className="form-group-apple">
+                <label className="form-label-apple">Patient Name *</label>
                 <input
                   type="text"
-                  className="form-input"
+                  className="form-input-apple"
                   value={newAppointment.patientName}
                   onChange={(e) => setNewAppointment({...newAppointment, patientName: e.target.value})}
-                  placeholder="Select or type patient name"
+                  placeholder="Search for patient..."
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Clinician *</label>
+              <div className="form-group-apple">
+                <label className="form-label-apple">Clinician *</label>
                 <select
-                  className="form-select"
+                  className="form-select-apple"
                   value={newAppointment.clinician}
                   onChange={(e) => setNewAppointment({...newAppointment, clinician: e.target.value})}
                 >
@@ -507,10 +567,10 @@ const SchedulingSystem = () => {
                 </select>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Visit Type *</label>
+              <div className="form-group-apple">
+                <label className="form-label-apple">Visit Type *</label>
                 <select
-                  className="form-select"
+                  className="form-select-apple"
                   value={newAppointment.type}
                   onChange={(e) => setNewAppointment({...newAppointment, type: e.target.value})}
                 >
@@ -520,31 +580,31 @@ const SchedulingSystem = () => {
                 </select>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
-                <div className="form-group">
-                  <label className="form-label">Date *</label>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1rem' }}>
+                <div className="form-group-apple">
+                  <label className="form-label-apple">Date *</label>
                   <input
                     type="date"
-                    className="form-input"
+                    className="form-input-apple"
                     value={newAppointment.date}
                     onChange={(e) => setNewAppointment({...newAppointment, date: e.target.value})}
                   />
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label">Time *</label>
+                <div className="form-group-apple">
+                  <label className="form-label-apple">Time *</label>
                   <input
                     type="time"
-                    className="form-input"
+                    className="form-input-apple"
                     value={newAppointment.time}
                     onChange={(e) => setNewAppointment({...newAppointment, time: e.target.value})}
                   />
                 </div>
 
-                <div className="form-group">
-                  <label className="form-label">Duration *</label>
+                <div className="form-group-apple">
+                  <label className="form-label-apple">Duration *</label>
                   <select
-                    className="form-select"
+                    className="form-select-apple"
                     value={newAppointment.duration}
                     onChange={(e) => setNewAppointment({...newAppointment, duration: parseInt(e.target.value)})}
                   >
@@ -556,32 +616,32 @@ const SchedulingSystem = () => {
                 </div>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Address</label>
+              <div className="form-group-apple">
+                <label className="form-label-apple">Address</label>
                 <input
                   type="text"
-                  className="form-input"
+                  className="form-input-apple"
                   value={newAppointment.address}
                   onChange={(e) => setNewAppointment({...newAppointment, address: e.target.value})}
                   placeholder="Patient's address"
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Phone</label>
+              <div className="form-group-apple">
+                <label className="form-label-apple">Phone</label>
                 <input
                   type="tel"
-                  className="form-input"
+                  className="form-input-apple"
                   value={newAppointment.phone}
                   onChange={(e) => setNewAppointment({...newAppointment, phone: e.target.value})}
                   placeholder="Contact phone number"
                 />
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Visit Notes</label>
+              <div className="form-group-apple">
+                <label className="form-label-apple">Visit Notes</label>
                 <textarea
-                  className="form-textarea"
+                  className="form-textarea-apple"
                   rows={3}
                   value={newAppointment.notes}
                   onChange={(e) => setNewAppointment({...newAppointment, notes: e.target.value})}
@@ -589,47 +649,18 @@ const SchedulingSystem = () => {
                 />
               </div>
 
-              <div style={{
-                padding: '16px',
-                background: '#eff6ff',
-                borderRadius: '8px',
-                border: '1px solid #bfdbfe'
-              }}>
-                <h4 style={{ margin: '0 0 8px 0', color: '#1e40af', fontSize: '14px' }}>
-                  Scheduling Guidelines
-                </h4>
-                <ul style={{ margin: 0, paddingLeft: '20px', fontSize: '14px', color: '#1e40af' }}>
-                  <li>Allow 15 minutes travel time between appointments</li>
-                  <li>Verify insurance authorization before scheduling</li>
-                  <li>Confirm patient availability</li>
-                </ul>
-              </div>
             </div>
 
-            <div className="modal-footer">
+            <div className="modal-footer-apple">
               <button
+                className="apple-button apple-button-secondary"
                 onClick={() => setShowNewAppointment(false)}
-                style={{
-                  padding: '8px 16px',
-                  border: '1px solid #e5e7eb',
-                  backgroundColor: 'white',
-                  color: '#6b7280',
-                  borderRadius: '6px',
-                  cursor: 'pointer'
-                }}
               >
                 Cancel
               </button>
               <button
+                className="apple-button apple-button-primary"
                 onClick={handleNewAppointment}
-                style={{
-                  padding: '8px 16px',
-                  backgroundColor: '#2563eb',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer'
-                }}
               >
                 Schedule Appointment
               </button>

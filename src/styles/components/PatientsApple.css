@@ -1,0 +1,637 @@
+/* Apple-Inspired Patients Management Styles */
+
+/* Container */
+.patients-container.apple-design {
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  background: #f5f5f7;
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* Header */
+.patients-header-apple {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.page-title-apple {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #1d1d1f;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.page-subtitle-apple {
+  font-size: 1.125rem;
+  color: #86868b;
+  margin: 0.5rem 0 0 0;
+}
+
+.header-actions-apple {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* AI Assistant Bar */
+.ai-assistant-bar-apple {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1.25rem;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: 0.75rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.ai-status-apple {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.ai-icon-apple {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0071e3;
+  border-radius: 0.5rem;
+  color: white;
+}
+
+.ai-text-apple {
+  font-size: 0.875rem;
+  color: #1d1d1f;
+}
+
+.ai-actions-apple {
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Search and Filters */
+.search-filters-apple {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.search-box-apple {
+  flex: 1;
+  min-width: 300px;
+  position: relative;
+}
+
+.search-icon-apple {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #86868b;
+}
+
+.search-input-apple {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.75rem;
+  background: white;
+  border: 1px solid transparent;
+  border-radius: 0.75rem;
+  font-size: 0.9375rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.search-input-apple:focus {
+  outline: none;
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+}
+
+.filter-group-apple {
+  display: flex;
+  background: #f5f5f7;
+  border-radius: 0.5rem;
+  padding: 0.125rem;
+}
+
+.filter-btn-apple {
+  padding: 0.5rem 1rem;
+  background: transparent;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #86868b;
+  cursor: pointer;
+  border-radius: 0.375rem;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.filter-btn-apple:hover {
+  color: #1d1d1f;
+}
+
+.filter-btn-apple.active {
+  background: white;
+  color: #0071e3;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Stats Row */
+.stats-row-apple {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card-apple {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card-apple::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 0.25rem;
+  background: linear-gradient(90deg, #0071e3, #af52de);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.stat-card-apple:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.stat-card-apple:hover::before {
+  opacity: 1;
+}
+
+.stat-header-apple {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.stat-label-apple {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #86868b;
+}
+
+.stat-icon-apple {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f7;
+  border-radius: 0.75rem;
+}
+
+.stat-value-apple {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0;
+}
+
+.stat-trend-apple {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-size: 0.8125rem;
+  margin-top: 0.5rem;
+}
+
+.trend-positive {
+  color: #34c759;
+}
+
+.trend-negative {
+  color: #ff3b30;
+}
+
+/* Patient Grid */
+.patients-grid-apple {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Patient Card */
+.patient-card-apple {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.patient-card-apple:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.patient-card-header-apple {
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
+  position: relative;
+}
+
+.patient-avatar-apple {
+  width: 3.5rem;
+  height: 3.5rem;
+  background: linear-gradient(135deg, #0071e3 0%, #af52de 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.patient-name-apple {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0 0 0.25rem 0;
+}
+
+.patient-meta-apple {
+  font-size: 0.875rem;
+  color: #86868b;
+  margin: 0;
+}
+
+.patient-badges-apple {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.status-badge-apple,
+.risk-badge-apple {
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.status-active {
+  background: #d1fae5;
+  color: #059669;
+}
+
+.status-discharged {
+  background: #f5f5f7;
+  color: #86868b;
+}
+
+.status-pending {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.risk-low {
+  background: #dbeafe;
+  color: #0071e3;
+}
+
+.risk-medium {
+  background: #fed7aa;
+  color: #ea580c;
+}
+
+.risk-high {
+  background: #fee2e2;
+  color: #dc2626;
+}
+
+/* Patient Card Body */
+.patient-card-body-apple {
+  padding: 1.5rem;
+}
+
+.info-row-apple {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.875rem;
+  color: #86868b;
+}
+
+.info-row-apple:last-child {
+  margin-bottom: 0;
+}
+
+.info-icon-apple {
+  color: #0071e3;
+  flex-shrink: 0;
+}
+
+/* Patient Card Footer */
+.patient-card-footer-apple {
+  padding: 1rem 1.5rem;
+  background: #f5f5f7;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.quick-stats-apple {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.stat-item-apple {
+  text-align: center;
+}
+
+.stat-number-apple {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #0071e3;
+  display: block;
+}
+
+.stat-text-apple {
+  font-size: 0.75rem;
+  color: #86868b;
+  display: block;
+  margin-top: 0.125rem;
+}
+
+.card-actions-apple {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.action-btn-apple {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: white;
+  border: 1px solid #e8e8ed;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  color: #86868b;
+}
+
+.action-btn-apple:hover {
+  background: #f5f5f7;
+  color: #0071e3;
+  border-color: #0071e3;
+}
+
+/* Add Patient Button */
+.add-patient-btn-apple {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1rem 1.5rem;
+  background: #0071e3;
+  color: white;
+  border: none;
+  border-radius: 2rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 113, 227, 0.3);
+  transition: all 0.2s ease;
+}
+
+.add-patient-btn-apple:hover {
+  background: #0077ed;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 113, 227, 0.4);
+}
+
+/* Patient Detail */
+.patient-detail-apple {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  overflow: hidden;
+}
+
+.detail-header-apple {
+  padding: 2rem;
+  background: linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 100%);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.detail-patient-info-apple {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.detail-avatar-apple {
+  width: 5rem;
+  height: 5rem;
+  background: linear-gradient(135deg, #0071e3 0%, #af52de 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1.25rem;
+  font-size: 2rem;
+  font-weight: 600;
+}
+
+.detail-info-apple h1 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0 0 0.5rem 0;
+}
+
+.detail-meta-apple {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  font-size: 0.9375rem;
+  color: #86868b;
+}
+
+.detail-actions-apple {
+  display: flex;
+  gap: 0.75rem;
+}
+
+/* Tabs */
+.detail-tabs-apple {
+  display: flex;
+  background: #f5f5f7;
+  padding: 0.25rem;
+  margin: 0;
+}
+
+.tab-item-apple {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  background: transparent;
+  border: none;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #86868b;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.tab-item-apple:hover {
+  color: #1d1d1f;
+}
+
+.tab-item-apple.active {
+  background: white;
+  color: #0071e3;
+  border-radius: 0.375rem;
+}
+
+.tab-content-apple {
+  padding: 2rem;
+}
+
+/* Empty State */
+.empty-state-apple {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.empty-icon-apple {
+  margin-bottom: 1.5rem;
+  opacity: 0.3;
+}
+
+.empty-title-apple {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d1d1f;
+  margin: 0 0 0.5rem 0;
+}
+
+.empty-description-apple {
+  font-size: 0.9375rem;
+  color: #86868b;
+  margin: 0 0 2rem 0;
+}
+
+/* Modal */
+.modal-overlay-apple {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal-content-apple {
+  background: white;
+  border-radius: 1rem;
+  width: 90%;
+  max-width: 600px;
+  max-height: 90vh;
+  overflow: hidden;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .patients-container.apple-design {
+    padding: 1rem;
+  }
+  
+  .patients-header-apple {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .search-filters-apple {
+    flex-direction: column;
+  }
+  
+  .search-box-apple {
+    min-width: 100%;
+  }
+  
+  .stats-row-apple {
+    grid-template-columns: 1fr;
+  }
+  
+  .patients-grid-apple {
+    grid-template-columns: 1fr;
+  }
+  
+  .add-patient-btn-apple {
+    bottom: 1rem;
+    right: 1rem;
+  }
+}

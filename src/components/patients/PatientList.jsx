@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Search, Users, Calendar, Phone, AlertTriangle, CheckCircle, Stethoscope } from 'lucide-react';
 import AddPatientForm from './AddPatientForm';
 import PatientDetail from './PatientDetail';
-import '../../styles/Patients.css';
+import '../../styles/components/Patients.css';
 
 const PatientList = () => {
   const [searchTerm, setSearchTerm] = useState('');

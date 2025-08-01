@@ -5,7 +5,7 @@ import {
   RefreshCw, CreditCard, Receipt, BarChart3, 
   ChevronLeft, ChevronRight, Filter, Send
 } from 'lucide-react';
-import '../../styles/RevenueCycle.css';
+import '../../styles/components/RevenueCycle.css';
 
 const RevenueCycle = () => {
   const [activeTab, setActiveTab] = useState('overview');

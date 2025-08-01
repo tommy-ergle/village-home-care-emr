@@ -33,7 +33,7 @@ import {
   Image,
   Paperclip
 } from 'lucide-react';
-import './ClinicalNotes.css';
+import '../../styles/components/ClinicalNotes.css';
 
 const ClinicalNotes = ({ patient, onBack }) => {
   // State management

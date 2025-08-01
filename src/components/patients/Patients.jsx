@@ -3,11 +3,12 @@ import {
   Users, Search, Plus, Filter, Download, Upload,
   Edit, Trash2, Eye, Phone, MapPin, Calendar,
   AlertCircle, CheckCircle, Clock, ChevronRight,
-  Mail, User, FileText, Activity, Shield, MoreVertical
+  Mail, User, FileText, Activity, Shield, MoreVertical,
+  Cpu, TrendingUp, Heart, UserPlus
 } from 'lucide-react';
 import PatientForm from './PatientForm';
 import PatientDetail from './PatientDetail';
-import '../../styles/Patients.css';
+import '../../styles/components/PatientsApple.css';
 
 const Patients = () => {
   const [patients, setPatients] = useState([
@@ -251,193 +252,268 @@ const Patients = () => {
 
   // List view
   return (
-    <div className="patients-container">
+    <div className="patients-container apple-design">
       {/* Header */}
-      <div className="patients-header">
+      <div className="patients-header-apple">
         <div>
-          <h1 className="page-title">Patients</h1>
-          <p className="page-subtitle">Manage patient records and information</p>
+          <h1 className="page-title-apple">Patients</h1>
+          <p className="page-subtitle-apple">Manage patient records with AI assistance</p>
         </div>
-        <div className="header-actions">
-          <button className="btn-secondary">
+      </div>
+
+      {/* AI Assistant Bar */}
+      <div className="ai-assistant-bar-apple">
+        <div className="ai-status-apple">
+          <div className="ai-icon-apple">
+            <Cpu size={18} />
+          </div>
+          <span className="ai-text-apple">AI is analyzing patient trends and risk factors</span>
+        </div>
+        <div className="ai-actions-apple">
+          <button className="apple-button apple-button-small apple-button-secondary">
             <Upload size={16} />
             Import
           </button>
-          <button className="btn-secondary">
+          <button className="apple-button apple-button-small apple-button-secondary">
             <Download size={16} />
             Export
-          </button>
-          <button className="btn-primary" onClick={handleAddPatient}>
-            <Plus size={16} />
-            Add Patient
           </button>
         </div>
       </div>
 
-      {/* Filters and Search */}
-      <div className="filters-section">
-        <div className="search-box">
-          <Search size={20} className="search-icon" />
+      {/* Stats Row */}
+      <div className="stats-row-apple">
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <span className="stat-label-apple">Total Patients</span>
+            <div className="stat-icon-apple">
+              <Users size={20} />
+            </div>
+          </div>
+          <h2 className="stat-value-apple">{patients.length}</h2>
+          <div className="stat-trend-apple trend-positive">
+            <TrendingUp size={14} />
+            <span>3 new this week</span>
+          </div>
+        </div>
+        
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <span className="stat-label-apple">Active Patients</span>
+            <div className="stat-icon-apple">
+              <Activity size={20} />
+            </div>
+          </div>
+          <h2 className="stat-value-apple">{patients.filter(p => p.status === 'active').length}</h2>
+          <div className="stat-trend-apple trend-positive">
+            <CheckCircle size={14} />
+            <span>All on track</span>
+          </div>
+        </div>
+        
+        <div className="stat-card-apple">
+          <div className="stat-header-apple">
+            <span className="stat-label-apple">High Risk</span>
+            <div className="stat-icon-apple">
+              <Heart size={20} />
+            </div>
+          </div>
+          <h2 className="stat-value-apple">{patients.filter(p => p.riskLevel === 'high').length}</h2>
+          <div className="stat-trend-apple trend-negative">
+            <AlertCircle size={14} />
+            <span>Needs attention</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Search and Filters */}
+      <div className="search-filters-apple">
+        <div className="search-box-apple">
+          <Search size={18} className="search-icon-apple" />
           <input
             type="text"
             placeholder="Search patients by name, phone, or diagnosis..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
+            className="search-input-apple"
           />
         </div>
         
-        <div className="filter-controls">
-          <select 
-            value={filterStatus} 
-            onChange={(e) => setFilterStatus(e.target.value)}
-            className="filter-select"
+        <div className="filter-group-apple">
+          <button 
+            className={`filter-btn-apple ${filterStatus === 'all' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('all')}
           >
-            <option value="all">All Status</option>
-            <option value="active">Active</option>
-            <option value="discharged">Discharged</option>
-            <option value="pending">Pending</option>
-          </select>
-          
-          <select 
-            value={filterRisk} 
-            onChange={(e) => setFilterRisk(e.target.value)}
-            className="filter-select"
+            All Patients
+          </button>
+          <button 
+            className={`filter-btn-apple ${filterStatus === 'active' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('active')}
           >
-            <option value="all">All Risk Levels</option>
-            <option value="low">Low Risk</option>
-            <option value="medium">Medium Risk</option>
-            <option value="high">High Risk</option>
-          </select>
-          
-          <select 
-            value={sortBy} 
-            onChange={(e) => setSortBy(e.target.value)}
-            className="filter-select"
+            Active
+          </button>
+          <button 
+            className={`filter-btn-apple ${filterStatus === 'discharged' ? 'active' : ''}`}
+            onClick={() => setFilterStatus('discharged')}
           >
-            <option value="name">Sort by Name</option>
-            <option value="recent">Recent Visits</option>
-            <option value="risk">Risk Level</option>
-          </select>
+            Discharged
+          </button>
         </div>
-      </div>
-
-      {/* Results Summary */}
-      <div className="results-summary">
-        <span>Showing {filteredPatients.length} of {patients.length} patients</span>
+        
+        <div className="filter-group-apple">
+          <button 
+            className={`filter-btn-apple ${filterRisk === 'all' ? 'active' : ''}`}
+            onClick={() => setFilterRisk('all')}
+          >
+            <Shield size={14} />
+            All Risk
+          </button>
+          <button 
+            className={`filter-btn-apple ${filterRisk === 'high' ? 'active' : ''}`}
+            onClick={() => setFilterRisk('high')}
+          >
+            High Risk
+          </button>
+          <button 
+            className={`filter-btn-apple ${filterRisk === 'medium' ? 'active' : ''}`}
+            onClick={() => setFilterRisk('medium')}
+          >
+            Medium
+          </button>
+          <button 
+            className={`filter-btn-apple ${filterRisk === 'low' ? 'active' : ''}`}
+            onClick={() => setFilterRisk('low')}
+          >
+            Low
+          </button>
+        </div>
       </div>
 
       {/* Patient Cards Grid */}
-      <div className="patients-grid">
-        {filteredPatients.map(patient => (
-          <div key={patient.id} className="patient-card">
-            <div className="patient-card-header">
-              <div className="patient-info">
-                <h3 className="patient-name">
-                  {patient.firstName} {patient.lastName}
-                </h3>
-                <p className="patient-meta">
-                  {patient.age} years • {patient.gender}
-                </p>
-              </div>
-              <div className="patient-badges">
-                <span className={`status-badge ${getStatusColor(patient.status)}`}>
-                  {patient.status}
-                </span>
-                <span className={`risk-badge ${getRiskColor(patient.riskLevel)}`}>
-                  {patient.riskLevel} risk
-                </span>
-              </div>
-            </div>
-
-            <div className="patient-card-body">
-              <div className="info-row">
-                <Phone size={14} />
-                <span>{patient.phone}</span>
-              </div>
-              <div className="info-row">
-                <MapPin size={14} />
-                <span>{patient.address}</span>
-              </div>
-              <div className="info-row">
-                <Activity size={14} />
-                <span>{patient.primaryDiagnosis}</span>
-              </div>
-              <div className="info-row">
-                <Calendar size={14} />
-                <span>Next visit: {new Date(patient.nextVisit).toLocaleDateString()}</span>
-              </div>
-            </div>
-
-            <div className="patient-card-footer">
-              <div className="quick-stats">
-                <div className="stat">
-                  <span className="stat-value">{patient.episodeCount}</span>
-                  <span className="stat-label">Episodes</span>
+      {filteredPatients.length === 0 ? (
+        <div className="empty-state-apple">
+          <Users size={64} className="empty-icon-apple" />
+          <h3 className="empty-title-apple">No patients found</h3>
+          <p className="empty-description-apple">Try adjusting your search or filters</p>
+        </div>
+      ) : (
+        <div className="patients-grid-apple">
+          {filteredPatients.map(patient => (
+            <div key={patient.id} className="patient-card-apple" onClick={() => handleViewPatient(patient)}>
+              <div className="patient-card-header-apple">
+                <div className="patient-avatar-apple">
+                  {patient.firstName.charAt(0)}{patient.lastName.charAt(0)}
                 </div>
-                <div className="stat">
-                  <span className="stat-value">{patient.medications.length}</span>
-                  <span className="stat-label">Medications</span>
-                </div>
-                <div className="stat">
-                  <span className="stat-value">{patient.conditions.length}</span>
-                  <span className="stat-label">Conditions</span>
+                <div>
+                  <h3 className="patient-name-apple">
+                    {patient.firstName} {patient.lastName}
+                  </h3>
+                  <p className="patient-meta-apple">
+                    {calculateAge(patient.dateOfBirth)} years • {patient.gender} • MRN: {patient.id.toString().padStart(6, '0')}
+                  </p>
+                  <div className="patient-badges-apple">
+                    <span className={`status-badge-apple ${getStatusColor(patient.status)}`}>
+                      {patient.status}
+                    </span>
+                    <span className={`risk-badge-apple ${getRiskColor(patient.riskLevel)}`}>
+                      {patient.riskLevel} risk
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="card-actions">
-                <button 
-                  className="action-btn"
-                  onClick={() => handleViewPatient(patient)}
-                  title="View Details"
-                >
-                  <Eye size={16} />
-                </button>
-                <button 
-                  className="action-btn"
-                  onClick={() => handleEditPatient(patient)}
-                  title="Edit"
-                >
-                  <Edit size={16} />
-                </button>
-                <button 
-                  className="action-btn danger"
-                  onClick={() => setShowDeleteConfirm(patient)}
-                  title="Delete"
-                >
-                  <Trash2 size={16} />
-                </button>
+              <div className="patient-card-body-apple">
+                <div className="info-row-apple">
+                  <Phone size={16} className="info-icon-apple" />
+                  <span>{patient.phone}</span>
+                </div>
+                <div className="info-row-apple">
+                  <MapPin size={16} className="info-icon-apple" />
+                  <span>{patient.address}</span>
+                </div>
+                <div className="info-row-apple">
+                  <Activity size={16} className="info-icon-apple" />
+                  <span>{patient.primaryDiagnosis}</span>
+                </div>
+                <div className="info-row-apple">
+                  <Calendar size={16} className="info-icon-apple" />
+                  <span>Next visit: {new Date(patient.nextVisit).toLocaleDateString()}</span>
+                </div>
+              </div>
+
+              <div className="patient-card-footer-apple">
+                <div className="quick-stats-apple">
+                  <div className="stat-item-apple">
+                    <span className="stat-number-apple">{patient.episodeCount}</span>
+                    <span className="stat-text-apple">Episodes</span>
+                  </div>
+                  <div className="stat-item-apple">
+                    <span className="stat-number-apple">{patient.medications.length}</span>
+                    <span className="stat-text-apple">Meds</span>
+                  </div>
+                  <div className="stat-item-apple">
+                    <span className="stat-number-apple">{patient.conditions.length}</span>
+                    <span className="stat-text-apple">Conditions</span>
+                  </div>
+                </div>
+
+                <div className="card-actions-apple">
+                  <button 
+                    className="action-btn-apple"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditPatient(patient);
+                    }}
+                    title="Edit"
+                  >
+                    <Edit size={16} />
+                  </button>
+                  <button 
+                    className="action-btn-apple"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowDeleteConfirm(patient);
+                    }}
+                    title="Delete"
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
-
-      {/* Empty State */}
-      {filteredPatients.length === 0 && (
-        <div className="empty-state">
-          <Users size={48} />
-          <h3>No patients found</h3>
-          <p>Try adjusting your search or filters</p>
+          ))}
         </div>
       )}
 
+      {/* Add Patient Button */}
+      <button 
+        className="add-patient-btn-apple"
+        onClick={handleAddPatient}
+      >
+        <Plus size={20} />
+        Add Patient
+      </button>
+
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className="modal-overlay" onClick={() => setShowDeleteConfirm(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
-            <h3>Delete Patient</h3>
-            <p>Are you sure you want to delete {showDeleteConfirm.firstName} {showDeleteConfirm.lastName}?</p>
-            <p className="warning-text">This action cannot be undone.</p>
-            <div className="modal-actions">
+        <div className="modal-overlay-apple" onClick={() => setShowDeleteConfirm(null)}>
+          <div className="modal-content-apple" onClick={e => e.stopPropagation()}>
+            <div className="modal-header-apple">
+              <h3 className="modal-title-apple">Delete Patient</h3>
+            </div>
+            <div className="modal-body-apple">
+              <p>Are you sure you want to delete <strong>{showDeleteConfirm.firstName} {showDeleteConfirm.lastName}</strong>?</p>
+              <p style={{ color: '#ff3b30', fontSize: '0.875rem', marginTop: '0.5rem' }}>This action cannot be undone.</p>
+            </div>
+            <div className="modal-footer-apple" style={{ background: '#f5f5f7', padding: '1.5rem', marginTop: '1.5rem' }}>
               <button 
-                className="btn-secondary"
+                className="apple-button apple-button-secondary"
                 onClick={() => setShowDeleteConfirm(null)}
               >
                 Cancel
               </button>
               <button 
-                className="btn-danger"
+                className="apple-button apple-button-danger"
                 onClick={() => handleDeletePatient(showDeleteConfirm.id)}
               >
                 Delete Patient

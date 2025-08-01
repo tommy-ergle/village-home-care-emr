@@ -5,7 +5,7 @@ import {
   Clock, TrendingUp, Award, BarChart3, 
   Stethoscope, Activity, Edit
 } from 'lucide-react';
-import '../../styles/AIDocumentation.css';
+import '../../styles/components/AIDocumentation.css';
 
 const AIDocumentation = () => {
   const [activeModule, setActiveModule] = useState('dashboard');

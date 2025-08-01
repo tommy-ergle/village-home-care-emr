@@ -1,6 +1,6 @@
 
 /* Import brand variables */
-@import './brand-variables.css';
+@import '../brand-variables.css';
 
 /* Patients Container */
 .patients-container {
