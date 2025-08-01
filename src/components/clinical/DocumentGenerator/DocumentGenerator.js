@@ -5,6 +5,11 @@ import TemplateSelector from './TemplateSelector';
 import DocumentPreview from './DocumentPreview';
 import ComplianceChecker from './ComplianceChecker';
 import GeneratedDocument from './GeneratedDocument';
+import { 
+  FileSignature, Brain, Sparkles, CheckCircle, 
+  ArrowLeft, Zap, Shield, Target, Clock,
+  FileText, Activity, Award, TrendingUp
+} from 'lucide-react';
 
 const DocumentGenerator = ({ patientId, onClose }) => {
   const [currentStep, setCurrentStep] = useState('select-type');
@@ -25,18 +30,81 @@ const DocumentGenerator = ({ patientId, onClose }) => {
   const [complianceStatus, setComplianceStatus] = useState(null);
   const [error, setError] = useState(null);
 
-  // Document type options
+  // Document type options with Apple-inspired design
   const documentTypes = [
-    { id: 'poc', name: 'Plan of Care (CMS 485)', icon: '📋' },
-    { id: 'pt-eval', name: 'Physical Therapy Evaluation', icon: '🏃' },
-    { id: 'ot-eval', name: 'Occupational Therapy Evaluation', icon: '✋' },
-    { id: 'st-eval', name: 'Speech Therapy Evaluation', icon: '🗣️' },
-    { id: 'progress', name: 'Progress Note', icon: '📈' },
-    { id: 're-eval', name: 'Re-evaluation', icon: '🔄' },
-    { id: 'discharge', name: 'Discharge Summary', icon: '🏠' },
-    { id: 'nursing', name: 'Skilled Nursing Assessment', icon: '💉' },
-    { id: 'care-update', name: 'Care Plan Update', icon: '📝' },
-    { id: 'goals', name: 'Goal Setting Documentation', icon: '🎯' }
+    { 
+      id: 'poc', 
+      name: 'Plan of Care (CMS 485)', 
+      icon: FileSignature,
+      description: 'Comprehensive care plan for Medicare certification',
+      badge: 'Popular',
+      featured: true
+    },
+    { 
+      id: 'pt-eval', 
+      name: 'Physical Therapy Evaluation', 
+      icon: Activity,
+      description: 'Initial PT assessment and treatment plan',
+      badge: 'Common'
+    },
+    { 
+      id: 'ot-eval', 
+      name: 'Occupational Therapy Evaluation', 
+      icon: Target,
+      description: 'OT evaluation for functional independence',
+      badge: 'Common'
+    },
+    { 
+      id: 'st-eval', 
+      name: 'Speech Therapy Evaluation', 
+      icon: Brain,
+      description: 'Speech-language pathology assessment',
+      badge: null
+    },
+    { 
+      id: 'progress', 
+      name: 'Progress Note', 
+      icon: TrendingUp,
+      description: 'Visit documentation and progress tracking',
+      badge: 'Frequent',
+      featured: true
+    },
+    { 
+      id: 're-eval', 
+      name: 'Re-evaluation', 
+      icon: CheckCircle,
+      description: 'Periodic reassessment of patient status',
+      badge: null
+    },
+    { 
+      id: 'discharge', 
+      name: 'Discharge Summary', 
+      icon: Award,
+      description: 'Comprehensive discharge documentation',
+      badge: null
+    },
+    { 
+      id: 'nursing', 
+      name: 'Skilled Nursing Assessment', 
+      icon: Shield,
+      description: 'RN assessment and care documentation',
+      badge: 'New',
+      isNew: true
+    },
+    { 
+      id: 'care-update', 
+      name: 'Care Plan Update', 
+      icon: FileText,
+      description: 'Modifications to existing care plans',
+      badge: null
+    },
+    { 
+      id: 'goals', 
+      name: 'Goal Setting Documentation', 
+      icon: Target,
+      description: 'SMART goals and outcome measures',
+      badge: null
+    }
   ];
 
   // Load patient data and related clinical information
@@ -238,17 +306,32 @@ const DocumentGenerator = ({ patientId, onClose }) => {
         return (
           <div className="document-type-selector">
             <h2>Select Document Type</h2>
+            <p className="document-type-subtitle">
+              Choose the type of clinical document you'd like to generate with AI assistance
+            </p>
             <div className="document-type-grid">
-              {documentTypes.map(type => (
-                <div
-                  key={type.id}
-                  className="document-type-card"
-                  onClick={() => handleDocumentTypeSelect(type.id)}
-                >
-                  <div className="type-icon">{type.icon}</div>
-                  <div className="type-name">{type.name}</div>
-                </div>
-              ))}
+              {documentTypes.map(type => {
+                const Icon = type.icon;
+                return (
+                  <div
+                    key={type.id}
+                    className={`document-type-card ${type.featured ? 'featured' : ''}`}
+                    onClick={() => handleDocumentTypeSelect(type.id)}
+                  >
+                    <div className="type-icon">
+                      <Icon size={24} />
+                    </div>
+                    <div className="type-name">{type.name}</div>
+                    <div className="type-description">{type.description}</div>
+                    {type.badge && (
+                      <div className={`type-badge ${type.isNew ? 'new' : ''}`}>
+                        {type.isNew && <Sparkles size={12} />}
+                        {type.badge}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           </div>
         );
@@ -278,10 +361,22 @@ const DocumentGenerator = ({ patientId, onClose }) => {
             <h2>Generating Document...</h2>
             <p>AI is analyzing clinical data and creating your document</p>
             <div className="generation-steps">
-              <div className="step active">Parsing clinical notes</div>
-              <div className="step">Extracting relevant data</div>
-              <div className="step">Applying compliance rules</div>
-              <div className="step">Generating content</div>
+              <div className="step active">
+                <Brain size={16} style={{ marginRight: '8px' }} />
+                Parsing clinical notes
+              </div>
+              <div className="step">
+                <Zap size={16} style={{ marginRight: '8px' }} />
+                Extracting relevant data
+              </div>
+              <div className="step">
+                <Shield size={16} style={{ marginRight: '8px' }} />
+                Applying compliance rules
+              </div>
+              <div className="step">
+                <FileSignature size={16} style={{ marginRight: '8px' }} />
+                Generating content
+              </div>
             </div>
           </div>
         );
@@ -321,22 +416,64 @@ const DocumentGenerator = ({ patientId, onClose }) => {
   return (
     <div className="document-generator">
       <div className="generator-header">
-        <h1>AI Clinical Documentation Generator</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '16px' }}>
+          {currentStep !== 'select-type' && (
+            <button 
+              onClick={() => {
+                if (currentStep === 'template-select') setCurrentStep('select-type');
+                else if (currentStep === 'wizard') setCurrentStep('template-select');
+                else if (currentStep === 'preview') setCurrentStep('wizard');
+              }}
+              style={{
+                background: 'none',
+                border: '1px solid rgba(0, 0, 0, 0.1)',
+                borderRadius: '12px',
+                padding: '12px',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                transition: 'all 0.2s ease'
+              }}
+              onMouseEnter={(e) => {
+                e.target.style.background = 'rgba(3, 53, 182, 0.05)';
+                e.target.style.borderColor = 'rgba(3, 53, 182, 0.2)';
+              }}
+              onMouseLeave={(e) => {
+                e.target.style.background = 'none';
+                e.target.style.borderColor = 'rgba(0, 0, 0, 0.1)';
+              }}
+            >
+              <ArrowLeft size={20} color="#0335b6" />
+            </button>
+          )}
+          <div>
+            <h1>AI Clinical Documentation Generator</h1>
+            <p className="generator-subtitle">
+              Generate CMS-compliant clinical documents in seconds with AI assistance
+            </p>
+          </div>
+        </div>
         {currentStep !== 'select-type' && (
           <div className="progress-indicator">
             <div className={`step ${['select-type'].includes(currentStep) ? 'active' : 'completed'}`}>
+              <FileText size={16} style={{ marginBottom: '4px' }} />
               Select Type
             </div>
             <div className={`step ${currentStep === 'template-select' ? 'active' : currentStep === 'select-type' ? '' : 'completed'}`}>
+              <Target size={16} style={{ marginBottom: '4px' }} />
               Choose Template
             </div>
             <div className={`step ${currentStep === 'wizard' ? 'active' : ['generating', 'preview', 'completed'].includes(currentStep) ? 'completed' : ''}`}>
+              <Brain size={16} style={{ marginBottom: '4px' }} />
               Configure
             </div>
             <div className={`step ${currentStep === 'generating' ? 'active' : ['preview', 'completed'].includes(currentStep) ? 'completed' : ''}`}>
+              <Zap size={16} style={{ marginBottom: '4px' }} />
               Generate
             </div>
             <div className={`step ${currentStep === 'preview' ? 'active' : currentStep === 'completed' ? 'completed' : ''}`}>
+              <CheckCircle size={16} style={{ marginBottom: '4px' }} />
               Review
             </div>
           </div>
@@ -345,8 +482,27 @@ const DocumentGenerator = ({ patientId, onClose }) => {
 
       {error && (
         <div className="error-message">
-          <span>⚠️ {error}</span>
-          <button onClick={() => setError(null)}>×</button>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <Shield size={20} color="#dc2626" />
+            <span>{error}</span>
+          </div>
+          <button 
+            onClick={() => setError(null)}
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '20px',
+              cursor: 'pointer',
+              color: '#dc2626',
+              padding: '4px',
+              borderRadius: '4px',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+          >
+            ×
+          </button>
         </div>
       )}
 
