@@ -8,15 +8,16 @@
 }
 
 .generator-header {
-  background: white;
+  background: 
+    linear-gradient(to bottom, #1e3a8a 0%, #1e3a8a 12px, white 12px),
+    white;
   border-radius: 20px;
   padding: 32px;
+  padding-top: 44px;
   margin-bottom: 32px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
   border: 1px solid rgba(0, 0, 0, 0.05);
-  border-top: 8px solid #0335b6;
   position: relative;
-  overflow: hidden;
 }
 
 .generator-header h1 {

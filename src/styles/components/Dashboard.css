@@ -9,15 +9,6 @@
   margin-bottom: 24px;
 }
 
-.welcome-section {
-  background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-  color: white;
-  padding: 32px;
-  border-radius: 16px;
-  margin-bottom: 24px;
-  position: relative;
-  overflow: hidden;
-}
 
 .welcome-section::before {
   content: '';
