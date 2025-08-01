@@ -1,4 +1,4 @@
-// src/App.js
+// src/App.jsx
 import React, { useState } from 'react';
 import LoginScreen from './components/auth/LoginScreen';
 import Dashboard from './components/dashboard/Dashboard';
@@ -10,7 +10,7 @@ import ClinicalNotes from './components/clinical/ClinicalNotes';
 import AIDocumentation from './components/documentation/AIDocumentation';
 import RevenueCycle from './components/revenue/RevenueCycle';
 import Analytics from './components/analytics/Analytics';
-import './styles/AppBranded.css';
+import './styles/App.css';
 
 function App() {
   const [user, setUser] = useState(null);
