@@ -1,0 +1,94 @@
+/* Village Home Care Brand Variables */
+:root {
+  /* Primary Brand Colors */
+  --vhc-primary: #0335b6;
+  --vhc-primary-light: #70b3e1;
+  --vhc-primary-medium: #5785b4;
+  --vhc-primary-soft: #74a9d9;
+  --vhc-primary-dark: #4c7dae;
+  --vhc-primary-deep: #4b7cad;
+  
+  /* Semantic Colors */
+  --vhc-success: #10b981;
+  --vhc-warning: #f59e0b;
+  --vhc-error: #ef4444;
+  --vhc-info: #70b3e1;
+  
+  /* Background Colors */
+  --vhc-bg-primary: #ffffff;
+  --vhc-bg-secondary: #f8fbff;
+  --vhc-bg-tertiary: #e8f2fc;
+  --vhc-bg-accent: rgba(112, 179, 225, 0.1);
+  
+  /* Text Colors */
+  --vhc-text-primary: #1a202c;
+  --vhc-text-secondary: #4a5568;
+  --vhc-text-tertiary: #718096;
+  --vhc-text-inverse: #ffffff;
+  
+  /* Border Colors */
+  --vhc-border-light: #e8f2fc;
+  --vhc-border-medium: #70b3e1;
+  --vhc-border-dark: #0335b6;
+  
+  /* Shadow Colors */
+  --vhc-shadow-sm: 0 1px 2px rgba(3, 53, 182, 0.05);
+  --vhc-shadow-md: 0 4px 6px rgba(3, 53, 182, 0.1);
+  --vhc-shadow-lg: 0 10px 15px rgba(3, 53, 182, 0.15);
+  --vhc-shadow-xl: 0 20px 25px rgba(3, 53, 182, 0.2);
+  
+  /* Gradients */
+  --vhc-gradient-primary: linear-gradient(135deg, #0335b6 0%, #70b3e1 100%);
+  --vhc-gradient-soft: linear-gradient(135deg, #70b3e1 0%, #e8f2fc 100%);
+  --vhc-gradient-deep: linear-gradient(135deg, #4c7dae 0%, #0335b6 100%);
+  
+  /* Typography */
+  --vhc-font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --vhc-font-heading: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  
+  /* Spacing */
+  --vhc-radius-sm: 6px;
+  --vhc-radius-md: 10px;
+  --vhc-radius-lg: 16px;
+  --vhc-radius-xl: 24px;
+  
+  /* Transitions */
+  --vhc-transition-fast: all 0.2s ease;
+  --vhc-transition-medium: all 0.3s ease;
+  --vhc-transition-slow: all 0.5s ease;
+}
+
+/* Brand Utility Classes */
+.vhc-bg-gradient {
+  background: var(--vhc-gradient-primary);
+}
+
+.vhc-text-gradient {
+  background: var(--vhc-gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.vhc-shadow-brand {
+  box-shadow: 0 4px 14px rgba(3, 53, 182, 0.25);
+}
+
+.vhc-border-gradient {
+  position: relative;
+  background: var(--vhc-bg-primary);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+.vhc-border-gradient::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: var(--vhc-gradient-primary);
+  border-radius: inherit;
+  z-index: -1;
+}

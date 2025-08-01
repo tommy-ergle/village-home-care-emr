@@ -1,0 +1,134 @@
+/* Import Brand Variables */
+@import './brand-variables.css';
+
+/* Global App Styles with VHC Branding */
+body {
+  font-family: var(--vhc-font-primary);
+  color: var(--vhc-text-primary);
+  background: var(--vhc-bg-secondary);
+}
+
+/* Sidebar Branding */
+.sidebar {
+  background: var(--vhc-bg-primary);
+  box-shadow: var(--vhc-shadow-md);
+}
+
+.sidebar-header {
+  background: var(--vhc-gradient-primary);
+  color: var(--vhc-text-inverse);
+  padding: 24px;
+  text-align: center;
+}
+
+.nav-button {
+  width: 100%;
+  padding: 12px 24px;
+  border: none;
+  background: transparent;
+  color: var(--vhc-text-secondary);
+  font-weight: 400;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  transition: var(--vhc-transition-fast);
+  border-radius: var(--vhc-radius-md);
+  margin: 4px 8px;
+}
+
+.nav-button:hover {
+  background: var(--vhc-bg-accent);
+  color: var(--vhc-primary);
+}
+
+.nav-button.active {
+  background: var(--vhc-bg-accent);
+  color: var(--vhc-primary);
+  font-weight: 500;
+  border-left: 3px solid var(--vhc-primary);
+}
+
+/* Header Branding */
+.app-header {
+  background: var(--vhc-bg-primary);
+  box-shadow: var(--vhc-shadow-sm);
+  border-bottom: 1px solid var(--vhc-border-light);
+}
+
+/* Buttons */
+.btn-primary {
+  background: var(--vhc-primary);
+  color: var(--vhc-text-inverse);
+  border: none;
+  padding: 8px 16px;
+  border-radius: var(--vhc-radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--vhc-transition-fast);
+}
+
+.btn-primary:hover {
+  background: var(--vhc-primary-dark);
+  box-shadow: var(--vhc-shadow-sm);
+}
+
+.btn-danger {
+  background: var(--vhc-error);
+  color: var(--vhc-text-inverse);
+}
+
+.btn-danger:hover {
+  background: #dc2626;
+}
+
+/* Cards */
+.card {
+  background: var(--vhc-bg-primary);
+  border-radius: var(--vhc-radius-md);
+  box-shadow: var(--vhc-shadow-sm);
+  border: 1px solid var(--vhc-border-light);
+  padding: 20px;
+}
+
+.card:hover {
+  box-shadow: var(--vhc-shadow-md);
+}
+
+/* Forms */
+input, select, textarea {
+  border: 1px solid var(--vhc-border-light);
+  border-radius: var(--vhc-radius-sm);
+  padding: 8px 12px;
+  font-family: var(--vhc-font-primary);
+  transition: var(--vhc-transition-fast);
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--vhc-primary);
+  box-shadow: 0 0 0 3px rgba(3, 53, 182, 0.1);
+}
+
+/* Loading States */
+.loading {
+  color: var(--vhc-primary);
+}
+
+/* Success Messages */
+.alert-success {
+  background: var(--vhc-success);
+  color: white;
+  padding: 12px;
+  border-radius: var(--vhc-radius-sm);
+}
+
+/* Error Messages */
+.alert-error {
+  background: var(--vhc-error);
+  color: white;
+  padding: 12px;
+  border-radius: var(--vhc-radius-sm);
+}
